@@ -2,9 +2,9 @@ import cv2, numpy, pyautogui, keyboard, time
 
 pyautogui.PAUSE = 0.1
 
-needle = cv2.cvtColor(cv2.imread('needle.jpg'), cv2.COLOR_BGR2GRAY)
-battle = cv2.cvtColor(cv2.imread('battle.jpg'), cv2.COLOR_BGR2GRAY)
-rod_vazia = cv2.cvtColor(cv2.imread('rod_vazia.jpg'), cv2.COLOR_BGR2GRAY)
+needle = cv2.cvtColor(cv2.imread('img/needle.jpg'), cv2.COLOR_BGR2GRAY)
+battle = cv2.cvtColor(cv2.imread('img/battle.jpg'), cv2.COLOR_BGR2GRAY)
+rod_vazia = cv2.cvtColor(cv2.imread('img/rod_vazia.jpg'), cv2.COLOR_BGR2GRAY)
 
 frame = cv2.cvtColor(numpy.array(pyautogui.screenshot()), cv2.COLOR_RGB2GRAY)
 match = cv2.matchTemplate(frame, needle, cv2.TM_CCOEFF_NORMED)
