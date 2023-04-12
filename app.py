@@ -61,7 +61,6 @@ while True:
   if max_val > 0.98:
     count_rod_vazia += 1
     if (count_rod_vazia > 5):
-      frame = cv2.cvtColor(numpy.array(pyautogui.screenshot()), cv2.COLOR_RGB2GRAY)
       match = cv2.matchTemplate(frame, needle, cv2.TM_CCOEFF_NORMED)
       min_val, max_val, min_loc, (x, y) = cv2.minMaxLoc(match)
 
