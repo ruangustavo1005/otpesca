@@ -1,4 +1,6 @@
 import cv2, numpy, pyautogui, keyboard, time, os, json, sys
+from dotenv import load_dotenv
+load_dotenv()
 
 pyautogui.PAUSE = 0.1
 
