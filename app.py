@@ -14,16 +14,17 @@ except:
   sys.exit()
 
 capturaveis = {}
-for capturavelName in os.listdir('img/pokes'):
-  capturavelId = capturavelName.split('.')[0];
-  if not capturavelId in paramsCapturaveis:
-    print(f'Não foi possível carregar o parâmetro do pokémon "{capturavelId}"!')
-    sys.exit()
+if os.getenv('AUTO_CAPTURA'):
+  for capturavelName in os.listdir('img/pokes'):
+    capturavelId = capturavelName.split('.')[0];
+    if not capturavelId in paramsCapturaveis:
+      print(f'Não foi possível carregar o parâmetro do pokémon "{capturavelId}"!')
+      sys.exit()
 
-  capturaveis[capturavelId] = {
-    'needle': cv2.cvtColor(cv2.imread(f'img/pokes/{capturavelName}'), cv2.COLOR_BGR2GRAY),
-    'limiar': paramsCapturaveis[capturavelId]
-  }
+    capturaveis[capturavelId] = {
+      'needle': cv2.cvtColor(cv2.imread(f'img/pokes/{capturavelName}'), cv2.COLOR_BGR2GRAY),
+      'limiar': paramsCapturaveis[capturavelId]
+    }
 
 frame = cv2.cvtColor(numpy.array(pyautogui.screenshot()), cv2.COLOR_RGB2GRAY)
 match = cv2.matchTemplate(frame, needle, cv2.TM_CCOEFF_NORMED)
@@ -34,8 +35,9 @@ pyautogui.click()
 pyautogui.click()
 
 count_rod_vazia = 0
-pausado = False
+pausado = True
 
+print('pressione ESC para iniciar')
 while True:
   if keyboard.is_pressed('esc'): 
     pausado = not pausado
@@ -73,21 +75,22 @@ while True:
     pyautogui.press('f9')
     pyautogui.press('f10')
   
-  log = []
-  frame = cv2.cvtColor(numpy.array(pyautogui.screenshot()), cv2.COLOR_RGB2GRAY)
-  for capturavelName, capturavel in capturaveis.items():
-    match = cv2.matchTemplate(frame, capturavel['needle'], cv2.TM_CCOEFF_NORMED)
-    min_val, max_val, min_loc, (x, y) = cv2.minMaxLoc(match)
-    log.append(f'{capturavelName}: {max_val:.3f}')
-    if max_val > capturavel['limiar']:
-      print(f'{capturavelName} disponível pra captura!')
-      time.sleep(0.5)
-      pyautogui.press('p')
-      time.sleep(0.2)
-      pyautogui.moveTo(x + 20, y + 20)
-      pyautogui.click()
-      time.sleep(0.1)
-  print(" | ".join(log))
+  if os.getenv('AUTO_CAPTURA'):
+    log = []
+    frame = cv2.cvtColor(numpy.array(pyautogui.screenshot()), cv2.COLOR_RGB2GRAY)
+    for capturavelName, capturavel in capturaveis.items():
+      match = cv2.matchTemplate(frame, capturavel['needle'], cv2.TM_CCOEFF_NORMED)
+      min_val, max_val, min_loc, (x, y) = cv2.minMaxLoc(match)
+      log.append(f'{capturavelName}: {max_val:.3f}')
+      if max_val > capturavel['limiar']:
+        print(f'{capturavelName} disponível pra captura!')
+        time.sleep(0.5)
+        pyautogui.press('p')
+        time.sleep(0.2)
+        pyautogui.moveTo(x + 20, y + 20)
+        pyautogui.click()
+        time.sleep(0.1)
+    print(" | ".join(log))
   
   match = cv2.matchTemplate(frame, rod_vazia, cv2.TM_CCOEFF_NORMED)
   min_val, max_val, min_loc, max_loc = cv2.minMaxLoc(match)
