@@ -25,7 +25,7 @@ if os.getenv('AUTO_CAPTURA'):
 
     capturaveis[capturavelId] = {
       'needle': cv2.cvtColor(cv2.imread(f'img/pokes/{capturavelName}'), cv2.COLOR_BGR2GRAY),
-      'limiar': paramsCapturaveis[capturavelId]
+      'conf': paramsCapturaveis[capturavelId]
     }
 
 count_rod_vazia = 0
@@ -76,12 +76,12 @@ while True:
       match = cv2.matchTemplate(frame, capturavel['needle'], cv2.TM_CCOEFF_NORMED)
       min_val, max_val, min_loc, (x, y) = cv2.minMaxLoc(match)
       log.append(f'{capturavelName}: {max_val:.3f}')
-      if max_val > capturavel['limiar']:
+      if max_val > capturavel['conf']['limiar']:
         print(f'{capturavelName} disponível pra captura!')
         time.sleep(0.5)
         pyautogui.press('p')
         time.sleep(0.2)
-        pyautogui.moveTo(x + 20, y + 20)
+        pyautogui.moveTo(x + capturavel['conf']['gap-x'], y + capturavel['conf']['gap-y'])
         pyautogui.click()
         time.sleep(0.1)
     print(" | ".join(log))
@@ -91,7 +91,7 @@ while True:
   
   if max_val > 0.98:
     count_rod_vazia += 1
-    if (count_rod_vazia > 5):
+    if (count_rod_vazia > 2):
       match = cv2.matchTemplate(frame, needle, cv2.TM_CCOEFF_NORMED)
       min_val, max_val, min_loc, (x, y) = cv2.minMaxLoc(match)
 
