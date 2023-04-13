@@ -26,14 +26,6 @@ if os.getenv('AUTO_CAPTURA'):
       'limiar': paramsCapturaveis[capturavelId]
     }
 
-frame = cv2.cvtColor(numpy.array(pyautogui.screenshot()), cv2.COLOR_RGB2GRAY)
-match = cv2.matchTemplate(frame, needle, cv2.TM_CCOEFF_NORMED)
-min_val, max_val, min_loc, (x, y) = cv2.minMaxLoc(match)
-
-pyautogui.moveTo(x + 10, y + 10)
-pyautogui.click()
-pyautogui.click()
-
 count_rod_vazia = 0
 pausado = True
 
