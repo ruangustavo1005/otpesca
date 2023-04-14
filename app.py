@@ -51,6 +51,7 @@ while True:
     pyautogui.click()
     pyautogui.click()
   
+  frame = cv2.cvtColor(numpy.array(pyautogui.screenshot()), cv2.COLOR_RGB2GRAY)
   match = cv2.matchTemplate(frame, battle, cv2.TM_CCOEFF_NORMED)
   min_val, max_val, min_loc, (x, y) = cv2.minMaxLoc(match)
   
@@ -78,12 +79,11 @@ while True:
       log.append(f'{capturavelName}: {max_val:.3f}')
       if max_val > capturavel['conf']['limiar']:
         print(f'{capturavelName} disponível pra captura!')
-        time.sleep(0.5)
         pyautogui.press('p')
         time.sleep(0.2)
         pyautogui.moveTo(x + capturavel['conf']['gap-x'], y + capturavel['conf']['gap-y'])
         pyautogui.click()
-        time.sleep(0.1)
+        time.sleep(0.2)
     print(" | ".join(log))
   
   match = cv2.matchTemplate(frame, rod_vazia, cv2.TM_CCOEFF_NORMED)
@@ -91,7 +91,7 @@ while True:
   
   if max_val > 0.98:
     count_rod_vazia += 1
-    if (count_rod_vazia > 2):
+    if (count_rod_vazia > 1):
       match = cv2.matchTemplate(frame, needle, cv2.TM_CCOEFF_NORMED)
       min_val, max_val, min_loc, (x, y) = cv2.minMaxLoc(match)
 

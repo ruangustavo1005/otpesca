@@ -10,7 +10,7 @@
     "gap-y": 20
   },
   "clamperl": {
-    "limiar": 0.80,
+    "limiar": 0.75,
     "gap-x": 20,
     "gap-y": 20
   },
@@ -40,13 +40,18 @@
     "gap-y": 20
   },
   "seel": {
-    "limiar": 0.80,
+    "limiar": 0.75,
     "gap-x": 20,
     "gap-y": 20
   },
   "tentacool": {
     "limiar": 0.80,
     "gap-x": 20,
+    "gap-y": 20
+  },
+  "huntail": {
+    "limiar": 0.80,
+    "gap-x": 50,
     "gap-y": 20
   }
 }
