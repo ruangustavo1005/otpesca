@@ -4,6 +4,8 @@ load_dotenv()
 
 pyautogui.PAUSE = 0.1
 
+rf = os.getenv('FATOR_REDIMENSIONAMENTO_POKES=1MONITOR_MAIOR')
+
 needle = cv2.cvtColor(cv2.imread('img/needle.jpg'), cv2.COLOR_BGR2GRAY)
 battle = cv2.cvtColor(cv2.imread('img/battle.jpg'), cv2.COLOR_BGR2GRAY)
 rod_vazia = cv2.cvtColor(cv2.imread('img/rod_vazia.jpg'), cv2.COLOR_BGR2GRAY)
@@ -24,7 +26,7 @@ if os.getenv('AUTO_CAPTURA'):
       sys.exit()
 
     capturaveis[capturavelId] = {
-      'needle': cv2.cvtColor(cv2.imread(f'img/pokes/{capturavelName}'), cv2.COLOR_BGR2GRAY),
+      'needle': cv2.resize(cv2.cvtColor(cv2.imread(f'img/pokes/{capturavelName}'), cv2.COLOR_BGR2GRAY), None, fx=rf, fy=rf, interpolation=cv2.INTER_LINEAR),
       'conf': paramsCapturaveis[capturavelId]
     }
 
