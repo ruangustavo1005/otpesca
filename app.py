@@ -4,7 +4,7 @@ load_dotenv()
 
 pyautogui.PAUSE = 0.1
 
-rf = os.getenv('FATOR_REDIMENSIONAMENTO_POKES')
+rf = float(os.getenv('FATOR_REDIMENSIONAMENTO_POKES'))
 
 needle = cv2.cvtColor(cv2.imread('img/needle.jpg'), cv2.COLOR_BGR2GRAY)
 battle = cv2.cvtColor(cv2.imread('img/battle.jpg'), cv2.COLOR_BGR2GRAY)
