@@ -1,34 +1,13 @@
-import cv2, numpy, pyautogui, keyboard, time, os, json, sys
+import cv2, numpy, pyautogui, keyboard, time, os
 from dotenv import load_dotenv
+from get_capturaveis import get as getCapturaveis
 load_dotenv()
 
 pyautogui.PAUSE = 0.1
 
-rf = float(os.getenv('FATOR_REDIMENSIONAMENTO_POKES'))
-
 needle = cv2.cvtColor(cv2.imread('img/needle.jpg'), cv2.COLOR_BGR2GRAY)
 battle = cv2.cvtColor(cv2.imread('img/battle.jpg'), cv2.COLOR_BGR2GRAY)
 rod_vazia = cv2.cvtColor(cv2.imread('img/rod_vazia.jpg'), cv2.COLOR_BGR2GRAY)
-
-try:
-  with open('capturaveis.json') as file:
-    paramsCapturaveis = json.load(file)
-except:
-  print('Não foi possível carregar os parâmetros dos pokémons capturáveis!')
-  sys.exit()
-
-capturaveis = {}
-if os.getenv('AUTO_CAPTURA'):
-  for capturavelName in os.listdir('img/pokes'):
-    capturavelId = capturavelName.split('.')[0];
-    if not capturavelId in paramsCapturaveis:
-      print(f'Não foi possível carregar o parâmetro do pokémon "{capturavelId}"!')
-      sys.exit()
-
-    capturaveis[capturavelId] = {
-      'needle': cv2.resize(cv2.cvtColor(cv2.imread(f'img/pokes/{capturavelName}'), cv2.COLOR_BGR2GRAY), None, fx=rf, fy=rf, interpolation=cv2.INTER_LINEAR),
-      'conf': paramsCapturaveis[capturavelId]
-    }
 
 count_rod_vazia = 0
 pausado = True
@@ -39,6 +18,8 @@ while True:
     pausado = not pausado
     print('pause' if pausado else 'start')
     time.sleep(2)
+    if not pausado:
+      capturaveis = getCapturaveis() if os.getenv('AUTO_CAPTURA') else {};
     
   if (pausado):
     continue
@@ -78,7 +59,7 @@ while True:
     for capturavelName, capturavel in capturaveis.items():
       match = cv2.matchTemplate(frame, capturavel['needle'], cv2.TM_CCOEFF_NORMED)
       min_val, max_val, min_loc, (x, y) = cv2.minMaxLoc(match)
-      log.append(f'{capturavelName}: {max_val:.3f}')
+      log.append(f'{capturavelName}: {max_val:.2f}')
       if max_val > capturavel['conf']['limiar']:
         print(f'{capturavelName} disponível pra captura!')
         pyautogui.press('p')
