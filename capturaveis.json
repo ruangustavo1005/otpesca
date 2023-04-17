@@ -4,17 +4,7 @@
     "gap-x": 20,
     "gap-y": 20
   },
-  "chincou": {
-    "limiar": 0.80,
-    "gap-x": 20,
-    "gap-y": 20
-  },
   "clamperl": {
-    "limiar": 0.75,
-    "gap-x": 20,
-    "gap-y": 20
-  },
-  "dewgong": {
     "limiar": 0.80,
     "gap-x": 20,
     "gap-y": 20
@@ -24,23 +14,13 @@
     "gap-x": 20,
     "gap-y": 20
   },
-  "qwilfish": {
-    "limiar": 0.80,
-    "gap-x": 20,
-    "gap-y": 20
-  },
   "seadra": {
     "limiar": 0.80,
-    "gap-x": 50,
+    "gap-x": 20,
     "gap-y": 20
   },
   "seaking": {
     "limiar": 0.80,
-    "gap-x": 20,
-    "gap-y": 20
-  },
-  "seel": {
-    "limiar": 0.75,
     "gap-x": 20,
     "gap-y": 20
   },
