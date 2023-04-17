@@ -1,5 +1,5 @@
 teste.py
 .env
 __pycache__
-img/pokes
+img/pokes/*
 capturaveis.json
