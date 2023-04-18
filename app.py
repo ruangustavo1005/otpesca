@@ -67,7 +67,7 @@ while True:
         pyautogui.moveTo(x + capturavel['conf']['gap-x'], y + capturavel['conf']['gap-y'])
         pyautogui.click()
         time.sleep(0.2)
-    if log.count() > 0:
+    if len(log) > 0:
       print(" | ".join(log))
   
   match = cv2.matchTemplate(frame, rod_vazia, cv2.TM_CCOEFF_NORMED)
