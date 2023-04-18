@@ -19,7 +19,7 @@ while True:
     print('pause' if pausado else 'start')
     time.sleep(2)
     if not pausado:
-      capturaveis = getCapturaveis() if os.getenv('AUTO_CAPTURA') else {};
+      capturaveis = getCapturaveis() if os.getenv('AUTO_CAPTURA') == 1 else {};
     
   if (pausado):
     continue
@@ -53,7 +53,7 @@ while True:
     pyautogui.press('f9')
     pyautogui.press('f10')
   
-  if os.getenv('AUTO_CAPTURA'):
+  if os.getenv('AUTO_CAPTURA') == 1:
     log = []
     frame = cv2.cvtColor(numpy.array(pyautogui.screenshot()), cv2.COLOR_RGB2GRAY)
     for capturavelName, capturavel in capturaveis.items():
