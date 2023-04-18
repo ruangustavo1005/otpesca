@@ -19,7 +19,7 @@ while True:
     print('pause' if pausado else 'start')
     time.sleep(2)
     if not pausado:
-      capturaveis = getCapturaveis() if os.getenv('AUTO_CAPTURA') == 1 else {};
+      capturaveis = getCapturaveis() if os.getenv('AUTO_CAPTURA') == '1' else {};
     
   if (pausado):
     continue
@@ -53,7 +53,7 @@ while True:
     pyautogui.press('f9')
     pyautogui.press('f10')
   
-  if os.getenv('AUTO_CAPTURA') == 1:
+  if os.getenv('AUTO_CAPTURA') == '1':
     log = []
     frame = cv2.cvtColor(numpy.array(pyautogui.screenshot()), cv2.COLOR_RGB2GRAY)
     for capturavelName, capturavel in capturaveis.items():
@@ -75,7 +75,7 @@ while True:
   
   if max_val > 0.98:
     count_rod_vazia += 1
-    if (count_rod_vazia > 1):
+    if (count_rod_vazia > (1 if os.getenv('AUTO_CAPTURA') == '1' else 4)):
       match = cv2.matchTemplate(frame, needle, cv2.TM_CCOEFF_NORMED)
       min_val, max_val, min_loc, (x, y) = cv2.minMaxLoc(match)
 
