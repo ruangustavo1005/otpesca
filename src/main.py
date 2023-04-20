@@ -119,10 +119,10 @@ class Main:
       pyautogui.press('f10')
 
   def verifyCapturaveis(self, frame):
-    log = []
+    log = {}
     for capturavelName, capturavel in self.capturaveis.get().items():
       max_val, x, y = self.matchTemplate(frame, capturavel['needle'])
-      log.append(f'{capturavelName}: {max_val:.2f}')
+      log[capturavelName] = f'{max_val:.3f}'
       if max_val > capturavel['conf']['limiar']:
         self.ultimosCapturaveis.insert(0, f'{capturavelName} disponível pra captura!')
         self.atualizaUltimosCapturaveis()
@@ -132,16 +132,35 @@ class Main:
         pyautogui.click()
         time.sleep(0.2)
     if len(log) > 0:
-      self.ultimosMatchsCapturaveis.insert(0, " | ".join(log))
+      self.ultimosMatchsCapturaveis.insert(0, log)
       self.atualizaUltimosMatchsCapturaveis()
 
   def atualizaUltimosCapturaveis(self):
-    for i in range(min(3, len(self.ultimosCapturaveis))):
+    for i in range(min(10, len(self.ultimosCapturaveis))):
       self.outputUltimosCapturaveis.write(self.ultimosCapturaveis[i], i, autoErase=(i==0))
 
   def atualizaUltimosMatchsCapturaveis(self):
-    for i in range(min(10, len(self.ultimosMatchsCapturaveis))):
-      self.outputUltimosMatchsCapturaveis.write(self.ultimosMatchsCapturaveis[i], i, autoErase=(i==0))
+    if len(self.ultimosMatchsCapturaveis) > 0:
+      headers = []
+      widthCols = {}
+      
+      for header in self.ultimosMatchsCapturaveis[0].keys():
+        widthCols[header] = max(5, len(header))
+        headers.append(header.ljust(widthCols[header]))
+      
+      self.outputUltimosMatchsCapturaveis.write(' | '.join(headers))
+      
+      for i in range(min(20, len(self.ultimosMatchsCapturaveis))):
+        print(self.ultimosMatchsCapturaveis[i].items())
+        log = []
+        for key, value in self.ultimosMatchsCapturaveis[i].items():
+          widthCol = widthCols[key]
+          widthColL = int((widthCol - 5) / 2)
+          widthColR = widthCol - widthColL - 5
+          print(widthColL, widthColR)
+          log.append((' ' * widthColL) + value + (' ' * widthColR))
+
+        self.outputUltimosMatchsCapturaveis.write(' | '.join(log), i + 1, autoErase=False)
 
   def verifyRodVazia(self, frame):
     max_val, _, _ = self.matchTemplate(frame, self.needleRodVazia)
@@ -149,7 +168,7 @@ class Main:
     if max_val > 0.98:
       self.countRodVazia += 1
       if (self.countRodVazia > (1 if self.autoCaptura else 4)):
-        max_val, x, y = self.matchTemplate(frame, self.needlePescaReady)
+        _, x, y = self.matchTemplate(frame, self.needlePescaReady)
 
         pyautogui.moveTo(x + 10, y + 10)
         pyautogui.click()
