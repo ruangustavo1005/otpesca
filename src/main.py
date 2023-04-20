@@ -15,13 +15,13 @@ class Main:
   def __init__(self):
     load_dotenv()
     pyautogui.PAUSE = 0.1
-    
+
     self.otpWindow: otpWindow.OtpWindow = otpWindow.OtpWindow()
 
     self.needlePescaReady = cv2.cvtColor(cv2.imread('img/pescaReady.jpg'), cv2.COLOR_BGR2GRAY)
     self.needleBattleVazio = cv2.cvtColor(cv2.imread('img/battleVazio.jpg'), cv2.COLOR_BGR2GRAY)
     self.needleRodVazia = cv2.cvtColor(cv2.imread('img/rodVazia.jpg'), cv2.COLOR_BGR2GRAY)
-    
+
     self.outputAutoCaptura: output.Output = output.Output(0, 0)
     self.outputPauseStart: output.Output = output.Output(0, 60)
     self.outputResetCapturaveis: output.Output = output.Output(1, 60)
@@ -49,19 +49,19 @@ class Main:
   def mainLoop(self):
     while True:
       self.verifyPauseStart()
-      
+
       if (self.pausado):
         continue
-      
+
       frame = self.otpWindow.getScreenshot()
       self.verifyPescaReady(frame)
-      
+
       frame = self.otpWindow.getScreenshot()
       self.verifyBattleReady(frame)
-      
+
       if self.autoCaptura:
         self.verifyCapturaveis(frame)
-      
+
       self.verifyRodVazia(frame)
 
   def verifyPauseStart(self):
@@ -71,7 +71,7 @@ class Main:
       self.atualizaUltimosCapturaveis()
       self.atualizaUltimosMatchsCapturaveis()
       time.sleep(1)
-      
+
       if not self.pausado:
         if self.autoCaptura:
           self.outputResetCapturaveis.write('Recarregando configurações de capturáveis...')
@@ -102,11 +102,11 @@ class Main:
 
   def verifyBattleReady(self, frame):
     max_val, x, y = self.matchTemplate(frame, self.needleBattleVazio)
-      
+
     if max_val < 0.98:
       pyautogui.moveTo(x + 10, y + 70)
       pyautogui.click()
-      
+
       pyautogui.press('f1')
       pyautogui.press('f2')
       pyautogui.press('f3')
@@ -137,19 +137,19 @@ class Main:
 
   def atualizaUltimosCapturaveis(self):
     for i in range(min(10, len(self.ultimosCapturaveis))):
-      self.outputUltimosCapturaveis.write(self.ultimosCapturaveis[i], i, autoErase=(i==0))
+      self.outputUltimosCapturaveis.write(self.ultimosCapturaveis[i], i, autoErase=(i == 0))
 
   def atualizaUltimosMatchsCapturaveis(self):
     if len(self.ultimosMatchsCapturaveis) > 0:
       headers = []
       widthCols = {}
-      
+
       for header in self.ultimosMatchsCapturaveis[0].keys():
         widthCols[header] = max(5, len(header))
         headers.append(header.ljust(widthCols[header]))
-      
+
       self.outputUltimosMatchsCapturaveis.write(' | '.join(headers))
-      
+
       for i in range(min(20, len(self.ultimosMatchsCapturaveis))):
         print(self.ultimosMatchsCapturaveis[i].items())
         log = []
@@ -163,14 +163,12 @@ class Main:
         self.outputUltimosMatchsCapturaveis.write(' | '.join(log), i + 1, autoErase=False)
 
   def verifyRodVazia(self, frame):
-    max_val, _, _ = self.matchTemplate(frame, self.needleRodVazia)
-    
+    max_val, x, y = self.matchTemplate(frame, self.needleRodVazia)
+
     if max_val > 0.98:
       self.countRodVazia += 1
       if (self.countRodVazia > (1 if self.autoCaptura else 4)):
-        _, x, y = self.matchTemplate(frame, self.needlePescaReady)
-
-        pyautogui.moveTo(x + 10, y + 10)
+        pyautogui.moveTo(x + 125, y + 15)
         pyautogui.click()
         pyautogui.click()
         self.countRodVazia = 0
