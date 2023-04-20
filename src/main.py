@@ -4,6 +4,7 @@ import pyautogui
 import keyboard
 import time
 import os
+from datetime import datetime
 from src.utils import otpWindow, capturaveis, output
 from dotenv import load_dotenv
 
@@ -119,7 +120,9 @@ class Main:
       pyautogui.press('f10')
 
   def verifyCapturaveis(self, frame):
-    log = {}
+    log = {
+      'hora': datetime.now().strftime('%H:%M:%S')
+    }
     for capturavelName, capturavel in self.capturaveis.get().items():
       max_val, x, y = self.matchTemplate(frame, capturavel['needle'])
       log[capturavelName] = f'{max_val:.3f}'
@@ -136,7 +139,7 @@ class Main:
       self.atualizaUltimosMatchsCapturaveis()
 
   def atualizaUltimosCapturaveis(self):
-    for i in range(min(10, len(self.ultimosCapturaveis))):
+    for i in range(min(3, len(self.ultimosCapturaveis))):
       self.outputUltimosCapturaveis.write(self.ultimosCapturaveis[i], i, autoErase=(i == 0))
 
   def atualizaUltimosMatchsCapturaveis(self):
@@ -145,19 +148,21 @@ class Main:
       widthCols = {}
 
       for header in self.ultimosMatchsCapturaveis[0].keys():
-        widthCols[header] = max(5, len(header))
-        headers.append(header.ljust(widthCols[header]))
+        widthCols[header] = max(len(self.ultimosMatchsCapturaveis[0][header]), len(header))
+        
+        widthCol = widthCols[header]
+        widthColL = int((widthCol - len(header)) / 2)
+        widthColR = widthCol - widthColL - len(header)
+        headers.append((' ' * widthColL) + header + (' ' * widthColR))
 
       self.outputUltimosMatchsCapturaveis.write(' | '.join(headers))
 
-      for i in range(min(20, len(self.ultimosMatchsCapturaveis))):
-        print(self.ultimosMatchsCapturaveis[i].items())
+      for i in range(min(10, len(self.ultimosMatchsCapturaveis))):
         log = []
         for key, value in self.ultimosMatchsCapturaveis[i].items():
           widthCol = widthCols[key]
-          widthColL = int((widthCol - 5) / 2)
-          widthColR = widthCol - widthColL - 5
-          print(widthColL, widthColR)
+          widthColL = int((widthCol - len(value)) / 2)
+          widthColR = widthCol - widthColL - len(value)
           log.append((' ' * widthColL) + value + (' ' * widthColR))
 
         self.outputUltimosMatchsCapturaveis.write(' | '.join(log), i + 1, autoErase=False)
