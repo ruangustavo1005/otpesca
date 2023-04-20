@@ -1,7 +1,6 @@
 import cv2
 import os
 import json
-import pygetwindow as gw
 
 
 class Capturaveis:

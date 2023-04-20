@@ -1,5 +1,4 @@
 import cv2
-import numpy
 import pyautogui
 import keyboard
 import time
