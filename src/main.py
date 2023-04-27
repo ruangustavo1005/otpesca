@@ -148,7 +148,7 @@ class Main:
 
       for header in self.ultimosMatchsCapturaveis[0].keys():
         widthCols[header] = max(len(self.ultimosMatchsCapturaveis[0][header]), len(header))
-        
+
         widthCol = widthCols[header]
         widthColL = int((widthCol - len(header)) / 2)
         widthColR = widthCol - widthColL - len(header)
@@ -171,7 +171,7 @@ class Main:
 
     if max_val > 0.98:
       self.countRodVazia += 1
-      if (self.countRodVazia > (1 if self.autoCaptura else 4)):
+      if (self.countRodVazia > (2 if self.autoCaptura else 4)):
         pyautogui.moveTo(x + 125, y + 15)
         pyautogui.click()
         pyautogui.click()
