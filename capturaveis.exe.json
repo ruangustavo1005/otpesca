@@ -33,5 +33,10 @@
     "limiar": 0.80,
     "gap-x": 50,
     "gap-y": 20
+  },
+  "gorebyss": {
+    "limiar": 0.80,
+    "gap-x": 50,
+    "gap-y": 20
   }
 }
