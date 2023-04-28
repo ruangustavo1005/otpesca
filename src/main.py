@@ -56,13 +56,13 @@ class Main:
       frame = self.otpWindow.getScreenshot()
       self.verifyPescaReady(frame)
 
+      self.verifyRodVazia(frame)
+
       frame = self.otpWindow.getScreenshot()
       self.verifyBattleReady(frame)
 
       if self.autoCaptura:
         self.verifyCapturaveis(frame)
-
-      self.verifyRodVazia(frame)
 
   def verifyPauseStart(self):
     if keyboard.is_pressed(KEY_START_PAUSE):
@@ -129,10 +129,8 @@ class Main:
         self.ultimosCapturaveis.insert(0, f'{capturavelName} disponível pra captura!')
         self.atualizaUltimosCapturaveis()
         pyautogui.press('p')
-        time.sleep(0.2)
         pyautogui.moveTo(x + capturavel['conf']['gap-x'], y + capturavel['conf']['gap-y'])
         pyautogui.click()
-        time.sleep(0.2)
     if len(log) > 0:
       self.ultimosMatchsCapturaveis.insert(0, log)
       self.atualizaUltimosMatchsCapturaveis()
@@ -171,7 +169,7 @@ class Main:
 
     if max_val > 0.98:
       self.countRodVazia += 1
-      if (self.countRodVazia > (2 if self.autoCaptura else 4)):
+      if (self.countRodVazia > (4 if self.autoCaptura else 4)):
         pyautogui.moveTo(x + 125, y + 15)
         pyautogui.click()
         pyautogui.click()
